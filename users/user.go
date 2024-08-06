@@ -12,10 +12,10 @@ var allUsers = []User{
 	{name: "Claudia", age: 20},
 }
 
-// String Array
-// var users = map[string]string{
-// 	"Lucas":   "Lucas",
-// 	"Roberto": "Roberto",
-// 	"Priscila": "Priscila",
-// 	"Claudia": "Claudia",
-// }
+func (u *User) GetName() string {
+	return u.name
+}
+
+func (u *User) GetAge() int {
+	return u.age
+}

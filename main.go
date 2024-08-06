@@ -8,6 +8,7 @@ import (
 func main() {
 
 	users := userMethods.GetAllUsers()
+
 	fmt.Println("Users:", users)
 
 	getUser := userMethods.GetUser("Roberto")
