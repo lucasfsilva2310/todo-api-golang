@@ -14,6 +14,12 @@ func main() {
 	cfg := config.LoadConfig()
 
 	var db *sql.DB = dbConnect(cfg)
+
+	if db == nil {
+		log.Fatal("Could not connect to database! Server will not start.")
+		return
+	}
+
 	defer db.Close()
 
 	log.Println("Connected to database.")
