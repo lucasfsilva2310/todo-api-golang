@@ -11,11 +11,13 @@ import (
 func main() {
 	cfg := config.LoadConfig()
 
+	log.Println("Connecting to database..")
 	db, err := database.Connect(cfg)
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
 	defer db.Close()
+	log.Println("Connected to database.")
 
 	userRepo := user.NewRepository(db)
 	userService := user.NewService(userRepo)
