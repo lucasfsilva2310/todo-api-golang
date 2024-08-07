@@ -1,22 +1,21 @@
 package main
 
 import (
+	"database/sql"
 	"go-learn/internal/config"
 	"go-learn/internal/database"
 	"go-learn/internal/user"
 	"log"
 	"net/http"
+	"time"
 )
 
 func main() {
 	cfg := config.LoadConfig()
 
-	log.Println("Connecting to database..")
-	db, err := database.Connect(cfg)
-	if err != nil {
-		log.Fatalf("failed to connect to database: %v", err)
-	}
+	var db *sql.DB = dbConnect(cfg)
 	defer db.Close()
+
 	log.Println("Connected to database.")
 
 	userRepo := user.NewRepository(db)
@@ -30,5 +29,23 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-// Responsible for starting the server
-// Has DB connection and HTTP Server
+func dbConnect(cfg *config.Config) *sql.DB {
+	for i := 1; i <= 10; i++ {
+		log.Println("Connecting to database, attempt:", i)
+		connectedDB, err := database.Connect(cfg)
+
+		if err != nil {
+			log.Printf("Failed to connect to database: %v", err)
+		}
+
+		err = connectedDB.Ping()
+		if err == nil {
+			return connectedDB
+		}
+		log.Println("Waiting for database to be ready...")
+		time.Sleep(5 * time.Second)
+
+	}
+	log.Println("Could not connect to database!")
+	return nil
+}

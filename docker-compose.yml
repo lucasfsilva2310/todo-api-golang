@@ -26,6 +26,8 @@ services:
       - .:/app
     networks:
       - go-learn-network
+    ports:
+      - "8080:8080"
     command: go run cmd/server/main.go
 
 volumes:
